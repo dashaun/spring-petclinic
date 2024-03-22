@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic.owner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 import java.text.ParseException;
@@ -25,7 +26,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +51,7 @@ class PetTypeFormatterTests {
 	}
 
 	@Test
-	void testPrint() {
+	void print() {
 		PetType petType = new PetType();
 		petType.setName("Hamster");
 		String petTypeName = this.petTypeFormatter.print(petType, Locale.ENGLISH);
@@ -68,7 +68,7 @@ class PetTypeFormatterTests {
 	@Test
 	void shouldThrowParseException() throws ParseException {
 		given(this.pets.findPetTypes()).willReturn(makePetTypes());
-		Assertions.assertThrows(ParseException.class, () -> {
+		assertThrows(ParseException.class, () -> {
 			petTypeFormatter.parse("Fish", Locale.ENGLISH);
 		});
 	}

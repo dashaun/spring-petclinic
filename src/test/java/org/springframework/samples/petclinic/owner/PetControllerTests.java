@@ -64,20 +64,20 @@ class PetControllerTests {
 	}
 
 	@Test
-	void testInitCreationForm() throws Exception {
+	void initCreationForm() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/pets/new", TEST_OWNER_ID)).andExpect(status().isOk())
 				.andExpect(view().name("pets/createOrUpdatePetForm")).andExpect(model().attributeExists("pet"));
 	}
 
 	@Test
-	void testProcessCreationFormSuccess() throws Exception {
+	void processCreationFormSuccess() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty")
 				.param("type", "hamster").param("birthDate", "2015-02-12")).andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/owners/{ownerId}"));
 	}
 
 	@Test
-	void testProcessCreationFormHasErrors() throws Exception {
+	void processCreationFormHasErrors() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/pets/new", TEST_OWNER_ID).param("name", "Betty").param("birthDate",
 				"2015-02-12")).andExpect(model().attributeHasNoErrors("owner"))
 				.andExpect(model().attributeHasErrors("pet")).andExpect(model().attributeHasFieldErrors("pet", "type"))
@@ -86,21 +86,21 @@ class PetControllerTests {
 	}
 
 	@Test
-	void testInitUpdateForm() throws Exception {
+	void initUpdateForm() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID))
 				.andExpect(status().isOk()).andExpect(model().attributeExists("pet"))
 				.andExpect(view().name("pets/createOrUpdatePetForm"));
 	}
 
 	@Test
-	void testProcessUpdateFormSuccess() throws Exception {
+	void processUpdateFormSuccess() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID).param("name", "Betty")
 				.param("type", "hamster").param("birthDate", "2015-02-12")).andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/owners/{ownerId}"));
 	}
 
 	@Test
-	void testProcessUpdateFormHasErrors() throws Exception {
+	void processUpdateFormHasErrors() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/pets/{petId}/edit", TEST_OWNER_ID, TEST_PET_ID).param("name", "Betty")
 				.param("birthDate", "2015/02/12")).andExpect(model().attributeHasNoErrors("owner"))
 				.andExpect(model().attributeHasErrors("pet")).andExpect(status().isOk())

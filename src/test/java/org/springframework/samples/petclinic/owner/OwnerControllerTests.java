@@ -99,20 +99,20 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testInitCreationForm() throws Exception {
+	void initCreationForm() throws Exception {
 		mockMvc.perform(get("/owners/new")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
 				.andExpect(view().name("owners/createOrUpdateOwnerForm"));
 	}
 
 	@Test
-	void testProcessCreationFormSuccess() throws Exception {
+	void processCreationFormSuccess() throws Exception {
 		mockMvc.perform(post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs")
 				.param("address", "123 Caramel Street").param("city", "London").param("telephone", "01316761638"))
 				.andExpect(status().is3xxRedirection());
 	}
 
 	@Test
-	void testProcessCreationFormHasErrors() throws Exception {
+	void processCreationFormHasErrors() throws Exception {
 		mockMvc.perform(
 				post("/owners/new").param("firstName", "Joe").param("lastName", "Bloggs").param("city", "London"))
 				.andExpect(status().isOk()).andExpect(model().attributeHasErrors("owner"))
@@ -122,20 +122,20 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testInitFindForm() throws Exception {
+	void initFindForm() throws Exception {
 		mockMvc.perform(get("/owners/find")).andExpect(status().isOk()).andExpect(model().attributeExists("owner"))
 				.andExpect(view().name("owners/findOwners"));
 	}
 
 	@Test
-	void testProcessFindFormSuccess() throws Exception {
+	void processFindFormSuccess() throws Exception {
 		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList(george(), new Owner()));
 		Mockito.when(this.owners.findByLastName(anyString(), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1")).andExpect(status().isOk()).andExpect(view().name("owners/ownersList"));
 	}
 
 	@Test
-	void testProcessFindFormByLastName() throws Exception {
+	void processFindFormByLastName() throws Exception {
 		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList(george()));
 		Mockito.when(this.owners.findByLastName(eq("Franklin"), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin")).andExpect(status().is3xxRedirection())
@@ -143,7 +143,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessFindFormNoOwnersFound() throws Exception {
+	void processFindFormNoOwnersFound() throws Exception {
 		Page<Owner> tasks = new PageImpl<Owner>(Lists.newArrayList());
 		Mockito.when(this.owners.findByLastName(eq("Unknown Surname"), any(Pageable.class))).thenReturn(tasks);
 		mockMvc.perform(get("/owners?page=1").param("lastName", "Unknown Surname")).andExpect(status().isOk())
@@ -154,7 +154,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testInitUpdateOwnerForm() throws Exception {
+	void initUpdateOwnerForm() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}/edit", TEST_OWNER_ID)).andExpect(status().isOk())
 				.andExpect(model().attributeExists("owner"))
 				.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
@@ -166,7 +166,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessUpdateOwnerFormSuccess() throws Exception {
+	void processUpdateOwnerFormSuccess() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs").param("address", "123 Caramel Street").param("city", "London")
 				.param("telephone", "01616291589")).andExpect(status().is3xxRedirection())
@@ -174,13 +174,13 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testProcessUpdateOwnerFormUnchangedSuccess() throws Exception {
+	void processUpdateOwnerFormUnchangedSuccess() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID)).andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/owners/{ownerId}"));
 	}
 
 	@Test
-	void testProcessUpdateOwnerFormHasErrors() throws Exception {
+	void processUpdateOwnerFormHasErrors() throws Exception {
 		mockMvc.perform(post("/owners/{ownerId}/edit", TEST_OWNER_ID).param("firstName", "Joe")
 				.param("lastName", "Bloggs").param("address", "").param("telephone", "")).andExpect(status().isOk())
 				.andExpect(model().attributeHasErrors("owner"))
@@ -190,7 +190,7 @@ class OwnerControllerTests {
 	}
 
 	@Test
-	void testShowOwner() throws Exception {
+	void showOwner() throws Exception {
 		mockMvc.perform(get("/owners/{ownerId}", TEST_OWNER_ID)).andExpect(status().isOk())
 				.andExpect(model().attribute("owner", hasProperty("lastName", is("Franklin"))))
 				.andExpect(model().attribute("owner", hasProperty("firstName", is("George"))))
