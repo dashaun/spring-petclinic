@@ -22,6 +22,8 @@ stages:          # List of stages for jobs, and their order of execution
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     - echo "Compiling the code..."
     - export JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64
@@ -32,6 +34,10 @@ deploy-job:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
+    - echo "Compiling the code..."
+    - export JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64
+    - ./mvnw package
+    - echo "Compile complete."
     - cf api https://api.sys.dhaka.cf-app.com
     - cf auth
     - cf target -o rpau-advisor
