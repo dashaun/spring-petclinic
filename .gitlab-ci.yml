@@ -33,7 +33,7 @@ deploy-job:
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
     - cf api https://api.sys.dhaka.cf-app.com
-    - cf auth $CF_USER $CF_PWD
+    - cf auth
     - cf target -o rpau-advisor
     - cf target -s petclinic
     - cf push -f manifest.yml
