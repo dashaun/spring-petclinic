@@ -2,7 +2,7 @@ applications:
 - name: rpau-spring-petclinic
   memory: 1G
   random-route: true
-  path: target/spring-petclinic-2.7.3-spring-boot.jar
+  path: target/spring-petclinic-2.7.3.jar
   env:
     JBP_CONFIG_SPRING_AUTO_RECONFIGURATION: '{enabled: false}'
     JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 21.+ } }'
