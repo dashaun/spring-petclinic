@@ -18,6 +18,7 @@
 
 stages:          # List of stages for jobs, and their order of execution
   - build
+  - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -26,3 +27,13 @@ build-job:       # This job runs in the build stage, which runs first.
     - export JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64
     - ./mvnw package
     - echo "Compile complete."
+deploy-job:   
+  stage: deploy
+  rules:
+    if: $CI_COMMIT_BRANCH == main
+  script:
+    - cf api https://api.sys.dhaka.cf-app.com
+    - cf auth $CF_USER $CF_PWD
+    - cf target -o rpau-advisor
+    - cf target -s petclinic
+    - cf push -f manifest.yml
