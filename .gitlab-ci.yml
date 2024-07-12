@@ -36,3 +36,4 @@ deploy-job:
     - cf auth
     - cf target -o rpau-advisor
     - cf target -s petclinic
+    - cf push -f 
