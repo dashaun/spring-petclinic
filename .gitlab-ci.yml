@@ -27,7 +27,7 @@ build-job:       # This job runs in the build stage, which runs first.
   script:
     - echo "Compiling the code..."
     - export JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64
-    - ./mvnw package
+    - ./mvnw package --settings=/home/gitlab/.m2/settings.xml
     - echo "Compile complete."
 deploy-job:   
   stage: deploy
@@ -36,7 +36,7 @@ deploy-job:
   script:
     - echo "Compiling the code..."
     - export JAVA_HOME=/usr/lib/jvm/java-1.17.0-openjdk-amd64
-    - ./mvnw package -X
+    - ./mvnw package --settings=/home/gitlab/.m2/settings.xml
     - echo "Compile complete."
     - cf api https://api.sys.dhaka.cf-app.com
     - cf auth
