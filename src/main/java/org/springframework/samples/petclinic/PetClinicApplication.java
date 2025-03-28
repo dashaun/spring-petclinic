@@ -17,7 +17,11 @@
 package org.springframework.samples.petclinic;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringBootVersion;
+import org.springframework.boot.actuate.info.Info;
+import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
 
 /**
  * PetClinic Spring Boot Application.
@@ -32,4 +36,13 @@ public class PetClinicApplication {
 		SpringApplication.run(PetClinicApplication.class, args);
 	}
 
+}
+
+@Component
+class SpringBootVersionInfoContributor implements InfoContributor {
+
+	@Override
+	public void contribute(Info.Builder builder) {
+		builder.withDetail("spring-boot-version", SpringBootVersion.getVersion());
+	}
 }
