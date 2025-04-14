@@ -23,6 +23,9 @@ import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * PetClinic Spring Boot Application.
  *
@@ -39,10 +42,30 @@ public class PetClinicApplication {
 }
 
 @Component
-class SpringBootVersionInfoContributor implements InfoContributor {
+class SpringInfoContributor implements InfoContributor {
 
 	@Override
 	public void contribute(Info.Builder builder) {
-		builder.withDetail("spring-boot-version", SpringBootVersion.getVersion());
+		Map<String, Object> springBootDetails = new HashMap<>();
+		springBootDetails.put("version", SpringBootVersion.getVersion());
+		Map<String, Object> springDetails = new HashMap<>();
+		springDetails.put("boot", springBootDetails);
+
+		builder
+			.withDetail("spring", springDetails);
+	}
+}
+
+@Component
+class JavaInfoContributor implements InfoContributor {
+
+	@Override
+	public void contribute(Info.Builder builder) {
+		Map<String, Object> javaDetails = new HashMap<>();
+		javaDetails.put("version", System.getProperty("java.version"));
+		javaDetails.put("vendor", System.getProperty("java.vendor"));
+		javaDetails.put("vm", System.getProperty("java.vm.name"));
+
+		builder.withDetail("java", javaDetails);
 	}
 }
